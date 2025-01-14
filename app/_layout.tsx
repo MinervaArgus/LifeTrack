@@ -1,39 +1,65 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { Tabs } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          borderTopWidth: 1,
+          borderTopColor: '#e0e0e0',
+          paddingBottom: 5,
+          paddingTop: 5,
+          height: 60,
+        },
+      }}>
+      <Tabs.Screen
+        name="index" // This corresponds to index.tsx
+        options={{
+          title: 'Water',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? "water" : "water-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+          tabBarActiveTintColor: '#4facfe',
+          tabBarInactiveTintColor: '#666',
+        }}
+      />
+      <Tabs.Screen
+        name="meds" // This corresponds to meds.tsx
+        options={{
+          title: 'Meds',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? "pill" : "pill"}
+              size={24}
+              color={color}
+            />
+          ),
+          tabBarActiveTintColor: '#4facfe',
+          tabBarInactiveTintColor: '#666',
+        }}
+      />
+      <Tabs.Screen
+        name="habits" // This will correspond to habits.tsx
+        options={{
+          title: 'Habits',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialCommunityIcons
+              name={focused ? "check-circle" : "check-circle-outline"}
+              size={24}
+              color={color}
+            />
+          ),
+          tabBarActiveTintColor: '#4facfe',
+          tabBarInactiveTintColor: '#666',
+        }}
+      />
+    </Tabs>
   );
 }
